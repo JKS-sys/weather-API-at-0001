@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Weather Forecast App - WeatherAPI.com</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body
+    class="bg-blue-100 min-h-screen flex flex-col items-center p-4 transition-colors duration-1000"
+    id="body"
+  >
+    <h1 class="text-3xl font-bold mb-4 text-red-600">Weather Forecast</h1>
+    <!-- Search Section -->
+    <div class="flex gap-3 mb-4 max-w-md w-full">
+      <input
+        id="city-input"
+        type="text"
+        placeholder="Enter city name"
+        class="flex-grow p-2 border border-gray-300 rounded"
+        autocomplete="off"
+      />
+      <button
+        id="search-btn"
+        class="bg-blue-600 text-white p-2 rounded hover:bg-blue-700 transition"
+      >
+        Search
+      </button>
+      <button
+        id="current-location-btn"
+        class="bg-green-600 text-white p-2 rounded hover:bg-green-700 transition"
+        title="Use Current Location"
+      >
+        📍
+      </button>
+    </div>
+    <!-- Recent Cities Dropdown -->
+    <div id="recent-container" class="mb-4 hidden max-w-md w-full">
+      <label class="block mb-1 font-semibold">Recent Searches:</label>
+      <select
+        id="recent-cities"
+        class="w-full p-2 border border-gray-300 rounded"
+      ></select>
+    </div>
+    <!-- Error Message -->
+    <div id="error-message" class="mb-4 text-red-600 font-semibold"></div>
+    <!-- Current Weather Display -->
+    <div
+      id="current-weather"
+      class="bg-white rounded shadow-md p-6 mb-6 max-w-md w-full text-center"
+    >
+      <h2 id="location" class="text-xl font-bold mb-2"></h2>
+      <img
+        id="weather-icon"
+        src=""
+        alt="Weather Icon"
+        class="bg-blue-100 mb-2 w-20 h-20 inline-block"
+      />
+      <div class="text-4xl font-bold mb-1" id="temp"></div>
+      <button
+        id="temp-toggle"
+        class="mb-4 px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 transition"
+      >
+        Toggle °C/°F
+      </button>
+      <div class="flex justify-around text-sm text-gray-700">
+        <div>Humidity: <span id="humidity"></span>%</div>
+        <div>Wind: <span id="wind"></span> kph</div>
+      </div>
+      <div id="alert" class="text-red-600 font-bold mt-2"></div>
+    </div>
+    <!-- 5-day Forecast -->
+    <div id="forecast" class="max-w-md w-full grid grid-cols-5 gap-3"></div>
+    <script src="script.js"></script>
+  </body>
+</html>
