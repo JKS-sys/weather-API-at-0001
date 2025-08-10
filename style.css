@@ -1,12 +1,16 @@
-/* style.css */
-
-/* Ensure input and dropdown exactly match container width */
-#suggestions {
-  min-width: 100%;
-}
-
-/* Optional: limit dropdown height & make scrollable */
+/* Suggestions dropdown styling */
 #suggestions {
   max-height: 250px;
   overflow-y: auto;
+}
+
+/* Fade-in effect for forecast cards */
+.forecast-card {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+.forecast-card.show {
+  opacity: 1;
+  transform: translateY(0);
 }
