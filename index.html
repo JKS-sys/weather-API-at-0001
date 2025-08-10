@@ -13,6 +13,17 @@
     class="bg-blue-100 min-h-screen flex flex-col items-center p-4 transition-colors duration-1000"
     id="body"
   >
+    <!-- App Header -->
+    <header class="w-full bg-blue-950 shadow-md mb-6 py-4">
+      <div class="max-w-3xl mx-auto flex items-center justify-between px-4">
+        <h1 class="text-2xl md:text-3xl font-bold text-cyan-300 tracking-wide">
+          <span class="inline-block align-middle">🌦️</span> Weather Forecast App
+        </h1>
+        <span class="text-sm text-cyan-100 hidden md:block">
+          Powered by WeatherAPI.com
+        </span>
+      </div>
+    </header>
     <h1 class="text-3xl font-bold mb-4 text-red-600">Weather Forecast</h1>
 
     <!-- Search Section -->
@@ -86,6 +97,26 @@
     </div>
     <!-- 5-day Forecast -->
     <div id="forecast" class="max-w-md w-full grid grid-cols-5 gap-3"></div>
+
+    <!-- App Footer -->
+    <footer class="w-full bg-blue-950 py-4 mt-8">
+      <div
+        class="max-w-3xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between text-cyan-100 text-sm"
+      >
+        <span>&copy; 2025 Jagadeesh Kumar S. All rights reserved.</span>
+        <span>
+          Weather data by
+          <a
+            href="https://www.weatherapi.com/"
+            class="underline hover:text-cyan-400"
+            target="_blank"
+            rel="noopener"
+            >WeatherAPI.com</a
+          >
+        </span>
+      </div>
+    </footer>
+
     <script src="script.js"></script>
   </body>
 </html>
