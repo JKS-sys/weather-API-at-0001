@@ -18,6 +18,43 @@ const recentCitiesSelect = document.getElementById("recent-cities");
 const bodyElem = document.getElementById("body");
 const suggestionsElem = document.getElementById("suggestions");
 
+// Modal DOM refs
+const modal = document.getElementById("weather-modal");
+const closeModal = document.getElementById("close-modal");
+const modalTitle = document.getElementById("modal-title");
+const modalIcon = document.getElementById("modal-icon");
+const modalCondition = document.getElementById("modal-condition");
+const modalExtra = document.getElementById("modal-extra");
+
+// Show Modal Function
+function showModal(title, icon, condition, extras = []) {
+  modalTitle.textContent = title;
+  modalIcon.src = icon;
+  modalCondition.textContent = condition;
+  modalExtra.innerHTML = extras.map((e) => `<div>${e}</div>`).join("");
+  modal.classList.remove("hidden");
+}
+
+// Close Modal
+closeModal.onclick = () => modal.classList.add("hidden");
+modal.onclick = (e) => {
+  if (e.target === modal) modal.classList.add("hidden");
+};
+
+// Click on Current Weather for popup
+document.getElementById("current-weather").addEventListener("click", () => {
+  if (!currentTempCelsius) return; // no data yet
+  showModal(
+    locationElem.textContent,
+    weatherIconElem.src,
+    `Temp: ${tempElem.textContent}`,
+    [
+      `Humidity: ${humidityElem.textContent}%`,
+      `Wind: ${windElem.textContent} kph`,
+    ]
+  );
+});
+
 let currentTempCelsius = null;
 let isCelsius = true;
 let recentCities = [];
@@ -159,6 +196,22 @@ function displayForecast(days) {
         <div>💧 ${day.day.avghumidity}%</div>
       </div>
     `;
+    // Popup click for forecast
+    card.addEventListener("click", () => {
+      showModal(
+        `${dayName}, ${monthDay}`,
+        `https:${day.day.condition.icon}`,
+        day.day.condition.text,
+        [
+          `Avg Temp: ${day.day.avgtemp_c.toFixed(1)} °C`,
+          `Max Temp: ${day.day.maxtemp_c.toFixed(1)} °C`,
+          `Min Temp: ${day.day.mintemp_c.toFixed(1)} °C`,
+          `Wind: ${day.day.maxwind_kph} kph`,
+          `Humidity: ${day.day.avghumidity}%`,
+        ]
+      );
+    });
+
     forecastElem.appendChild(card);
     setTimeout(() => card.classList.add("show"), 50 * (i + 1));
   });
