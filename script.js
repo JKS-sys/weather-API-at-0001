@@ -36,6 +36,16 @@ let recentCities = [];
 
 function updateRecentDropdown() {
   recentCitiesSelect.innerHTML = "";
+
+  // Always add placeholder at the top
+  const placeholder = document.createElement("option");
+  placeholder.value = "";
+  placeholder.textContent = "Select a recent city";
+  placeholder.disabled = true;
+  placeholder.selected = true;
+  recentCitiesSelect.appendChild(placeholder);
+
+  // Add cities (most recent first)
   recentCities.forEach((city) => {
     const opt = document.createElement("option");
     opt.value = city;
@@ -195,7 +205,6 @@ tempToggleBtn.onclick = () => {
   }
 };
 
-// Fix: Works even if only one recent city
 recentCitiesSelect.onchange = () => {
   if (recentCitiesSelect.value) fetchWeather(recentCitiesSelect.value);
 };
