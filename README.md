@@ -1,6 +1,6 @@
-Absolutely! Here is a ready-to-use `README.md` for your Weather Forecast Application, properly formatted with Markdown headings (`#`) and no extra placeholder code/text.  
-**Copy and paste this as your `README.md` file.**  
-(You can add screenshots as needed by using Markdown syntax at the end.)
+Got it ✅ — your README needs to be fixed so it matches your **current updated code** (which now uses a **7‑day forecast**, not 5), and also removes any leftover placeholder or broken comment text.
+
+Here’s your **cleaned & corrected `README.md`**:
 
 ---
 
@@ -8,24 +8,32 @@ Absolutely! Here is a ready-to-use `README.md` for your Weather Forecast Applica
 
 ## Overview
 
-This project is a **Weather Forecast Application** built with **HTML**, **JavaScript**, **Tailwind CSS**, and a touch of custom CSS for layout.  
-It retrieves real-time weather information and a 5‑day forecast for any city using the [WeatherAPI.com](https://www.weatherapi.com/) service.
+This project is a **Weather Forecast Application** built with **HTML**, **JavaScript**, **Tailwind CSS**, and a small amount of custom CSS for layout.  
+It retrieves real-time weather information and a **7‑day forecast** for any city using the [WeatherAPI.com](https://www.weatherapi.com/) service.
 
-The application provides a clean, responsive, and user-friendly interface to check weather conditions by city name or your current location.
+The application provides a clean, responsive, and user-friendly interface to check weather conditions by **city name** or **your current location**.  
+It also includes an **autocomplete city search**, **recent searches**, **extreme temperature alerts**, and **dynamic background changes** for rainy weather.
 
 ---
 
 ## Features
 
-- **Search by city name** or **current location** (via browser geolocation).
-- **Autocomplete suggestions** for cities while typing.
-- **Recently searched cities** saved locally (max 5), with dropdown for quick lookup.
-- **Displays current weather details**: temperature (°C/°F), humidity, wind speed, and weather icon.
-- **Temperature unit toggle** (°C / °F) for today's temperature.
-- **Custom alerts** for extreme temperatures (≥ 40°C).
-- **Dynamic background** for rainy weather.
-- **5-day forecast** with daily temperature, wind, and humidity icons.
-- **Responsive design** for desktop, tablet, and mobile (iPad Mini / iPhone SE).
+- 🔍 **Search by city name** or 📍 **current location** (via browser geolocation).
+- ⌨️ **Autocomplete suggestions** while typing (prefix-matching for relevant cities).
+- 🕒 **Recently searched cities list** stored locally (max 5 entries).
+- 🌡 **Current weather details**:
+  - Temperature (°C / °F toggle)
+  - Humidity
+  - Wind speed
+  - Weather condition icon
+- 🚨 **Extreme heat alert** when temperature ≥ 40°C.
+- 🌧 **Dynamic rainy background** for rainy weather codes.
+- 📆 **7‑day forecast** with daily:
+  - Average temperature
+  - Max wind speed
+  - Average humidity
+  - Weather icons
+- 📱 **Responsive design** for desktop, tablet, and mobile (tested on iPad Mini, iPhone SE).
 
 ---
 
@@ -41,32 +49,33 @@ The application provides a clean, responsive, and user-friendly interface to che
 2. **Get your WeatherAPI key:**
 
    - Sign up at [WeatherAPI.com](https://www.weatherapi.com/) for a free API key.
-   - Open `script.js` and replace the placeholder:
+   - Open `script.js` and replace:
      ```javascript
      const apiKey = "YOUR_API_KEY_HERE";
      ```
-     with your actual API key.
+     with **your actual API key**.
 
 3. **Open the app:**
-   - Open `index.html` directly in your web browser.
+   - Double-click `index.html` (or run it via a local HTTP server if preferred).
 
 ---
 
 ## Usage
 
-- **Search weather:** Type a city name and click **Search** or press **Enter**.
-- **City suggestions:** As you type, pick a city from the autocomplete dropdown.
-- **Current location:** Click 📍 to get your local weather (may require location access).
-- **Recent searches:** Use the dropdown to reload a recently searched city.
-- **Toggle temperature:** Use the button to switch between Celsius and Fahrenheit.
+- **Search:** Type a city name and click **Search** or press **Enter**.
+- **City suggestions:** While typing, choose from matching city suggestions.
+- **Current location:** Click the 📍 button (allow location permission in your browser).
+- **Recent searches:** Select a previously searched city from the dropdown to instantly reload weather data.
+- **Temperature units:** Click the toggle button to switch between °C and °F.
+- **Forecast:** Scroll down to view the full 7‑day forecast with daily weather details.
 
 ---
 
 ## Notes
 
-- Weather data powered by [WeatherAPI.com](https://www.weatherapi.com/).
-- Uses **Tailwind CSS** (loaded via CDN) and a small custom CSS file.
-- No `node_modules` or npm install is needed.
+- Weather data powered by **[WeatherAPI.com](https://www.weatherapi.com/)**.
+- Styling via **Tailwind CSS** (via CDN) plus a small custom `style.css`.
+- No `node_modules` or npm installation is required.
 
 ---
 
@@ -75,9 +84,9 @@ The application provides a clean, responsive, and user-friendly interface to che
 ```
 weather-app/
 ├── index.html      # Main HTML layout
-├── script.js       # JavaScript logic
-├── style.css       # Custom styles (for layout/autocomplete)
-├── README.md       # This documentation file
+├── script.js       # JavaScript logic (7-day forecast)
+├── style.css       # Custom styles (layout, fade-in animation)
+├── README.md       # Project documentation
 ```
 
 ---
@@ -88,9 +97,11 @@ weather-app/
 
 ---
 
-<!--
+💡 **Tip:** For better presentation in your submission, add screenshots of search, current weather, and the 7‑day forecast:
+
+```md
 ## Screenshots
 
-You can add screenshots here:
-
-![Search Examplet](screenshots/forecast.png with your submission!**
+![Search Example](screenshots/search.png)
+![7-Day Forecast](screenshots/forecast.png)
+```
