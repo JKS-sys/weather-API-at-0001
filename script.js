@@ -22,9 +22,8 @@ let currentTempCelsius = null;
 let isCelsius = true;
 let recentCities = [];
 
-loadRecentCities();
-
-function loadRecentCities() {
+// Load recent cities
+(function loadRecentCities() {
   const stored = localStorage.getItem("recentCities");
   if (stored) {
     recentCities = JSON.parse(stored);
@@ -33,15 +32,15 @@ function loadRecentCities() {
       recentContainer.classList.remove("hidden");
     }
   }
-}
+})();
 
 function updateRecentDropdown() {
   recentCitiesSelect.innerHTML = "";
   recentCities.forEach((city) => {
-    const option = document.createElement("option");
-    option.value = city;
-    option.textContent = city;
-    recentCitiesSelect.appendChild(option);
+    const opt = document.createElement("option");
+    opt.value = city;
+    opt.textContent = city;
+    recentCitiesSelect.appendChild(opt);
   });
 }
 
@@ -71,8 +70,8 @@ async function fetchWeather(city) {
     displayCurrentWeather(data.location, data.current);
     displayForecast(data.forecast.forecastday);
     addRecentCity(data.location.name);
-  } catch (error) {
-    showError(error.message);
+  } catch (err) {
+    showError(err.message);
   }
 }
 
@@ -87,21 +86,21 @@ async function fetchWeatherByCoords(lat, lon) {
     displayCurrentWeather(data.location, data.current);
     displayForecast(data.forecast.forecastday);
     addRecentCity(data.location.name);
-  } catch (error) {
-    showError(error.message);
+  } catch (err) {
+    showError(err.message);
   }
 }
 
-function displayCurrentWeather(locationData, currentData) {
-  locationElem.textContent = `${locationData.name}, ${locationData.region}, ${locationData.country}`;
-  currentTempCelsius = currentData.temp_c;
+function displayCurrentWeather(loc, cur) {
+  locationElem.textContent = `${loc.name}, ${loc.region}, ${loc.country}`;
+  currentTempCelsius = cur.temp_c;
   isCelsius = true;
   updateTempDisplay();
-  humidityElem.textContent = currentData.humidity;
-  windElem.textContent = currentData.wind_kph;
-  weatherIconElem.src = `https:${currentData.condition.icon}?t=${Date.now()}`;
-  weatherIconElem.alt = currentData.condition.text;
-  setBackground(currentData.condition.code);
+  humidityElem.textContent = cur.humidity;
+  windElem.textContent = cur.wind_kph;
+  weatherIconElem.src = `https:${cur.condition.icon}?t=${Date.now()}`;
+  weatherIconElem.alt = cur.condition.text;
+  setBackground(cur.condition.code);
   alertElem.textContent =
     currentTempCelsius >= 40 ? "⚠️ Extreme Temperature Alert!" : "";
 }
@@ -176,8 +175,8 @@ function clearUI() {
 
 // Events
 searchBtn.onclick = () => {
-  if (!cityInput.value.trim()) return showError("Please enter a city name.");
-  fetchWeather(cityInput.value);
+  if (cityInput.value.trim()) fetchWeather(cityInput.value);
+  else showError("Please enter a city name.");
 };
 cityInput.addEventListener("keyup", (e) => {
   if (e.key === "Enter") searchBtn.click();
@@ -195,7 +194,12 @@ tempToggleBtn.onclick = () => {
     updateTempDisplay();
   }
 };
+
+// Fix: Works even if only one recent city
 recentCitiesSelect.onchange = () => {
+  if (recentCitiesSelect.value) fetchWeather(recentCitiesSelect.value);
+};
+recentCitiesSelect.onclick = () => {
   if (recentCitiesSelect.value) fetchWeather(recentCitiesSelect.value);
 };
 
@@ -208,10 +212,11 @@ cityInput.addEventListener("input", async () => {
     return;
   }
   try {
-    const url = `https://api.weatherapi.com/v1/search.json?key=${apiKey}&q=${encodeURIComponent(
-      query
-    )}`;
-    const res = await fetch(url);
+    const res = await fetch(
+      `https://api.weatherapi.com/v1/search.json?key=${apiKey}&q=${encodeURIComponent(
+        query
+      )}`
+    );
     const cities = await res.json();
     if (!Array.isArray(cities) || cities.length === 0) {
       suggestionsElem.innerHTML =
@@ -236,8 +241,8 @@ cityInput.addEventListener("input", async () => {
       suggestionsElem.appendChild(li);
     });
     suggestionsElem.classList.remove("hidden");
-  } catch (e) {
-    console.error(e);
+  } catch (err) {
+    console.error(err);
   }
 });
 document.addEventListener("click", (e) => {
