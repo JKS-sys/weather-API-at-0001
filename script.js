@@ -1,4 +1,4 @@
-const apiKey = "3ea6c680a43a4b76829155912250808"; // Your WeatherAPI.com key
+const apiKey = "3ea6c680a43a4b76829155912250808"; // Replace with your WeatherAPI.com key
 
 // DOM
 const cityInput = document.getElementById("city-input");
@@ -36,8 +36,6 @@ let recentCities = [];
 
 function updateRecentDropdown() {
   recentCitiesSelect.innerHTML = "";
-
-  // Always add placeholder at the top
   const placeholder = document.createElement("option");
   placeholder.value = "";
   placeholder.textContent = "Select a recent city";
@@ -45,7 +43,6 @@ function updateRecentDropdown() {
   placeholder.selected = true;
   recentCitiesSelect.appendChild(placeholder);
 
-  // Add cities (most recent first)
   recentCities.forEach((city) => {
     const opt = document.createElement("option");
     opt.value = city;
@@ -149,13 +146,13 @@ function displayForecast(days) {
     });
     const card = document.createElement("div");
     card.className =
-      "forecast-card bg-gray-800 text-white rounded shadow p-3 flex flex-col items-center text-center";
+      "forecast-card bg-gray-800 text-white rounded shadow p-3 flex flex-col items-center text-center hover:scale-105 hover:shadow-xl transition-transform duration-300";
     card.innerHTML = `
       <div class="font-semibold">${dayName}</div>
       <div class="text-xs text-gray-300">${monthDay}</div>
       <img src="https:${day.day.condition.icon}?t=${Date.now()}" alt="${
       day.day.condition.text
-    }" class="w-12 h-12 my-2" />
+    }" class="w-12 h-12 my-2 animate-pulse" />
       <div class="mt-1 text-sm">
         <div>🌡️ ${day.day.avgtemp_c.toFixed(1)} °C</div>
         <div>💨 ${day.day.maxwind_kph} kph</div>
@@ -205,6 +202,7 @@ tempToggleBtn.onclick = () => {
   }
 };
 
+// Fix: Works even if only one recent city
 recentCitiesSelect.onchange = () => {
   if (recentCitiesSelect.value) fetchWeather(recentCitiesSelect.value);
 };
@@ -212,7 +210,7 @@ recentCitiesSelect.onclick = () => {
   if (recentCitiesSelect.value) fetchWeather(recentCitiesSelect.value);
 };
 
-// Autocomplete with prefix filter
+// Autocomplete (prefix filter)
 cityInput.addEventListener("input", async () => {
   const query = cityInput.value.trim().toLowerCase();
   if (query.length < 2) {
