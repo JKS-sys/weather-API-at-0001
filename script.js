@@ -1,6 +1,6 @@
 const apiKey = "3ea6c680a43a4b76829155912250808"; // Your WeatherAPI.com key
 
-// DOM elements
+// DOM
 const cityInput = document.getElementById("city-input");
 const searchBtn = document.getElementById("search-btn");
 const currentLocationBtn = document.getElementById("current-location-btn");
@@ -63,13 +63,11 @@ async function fetchWeather(city) {
   try {
     const url = `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${encodeURIComponent(
       city
-    )}&days=5&aqi=no&alerts=no`;
+    )}&days=7&aqi=no&alerts=no`;
     const res = await fetch(url);
     const data = await res.json();
-
     if (res.status !== 200)
       throw new Error(data.error?.message || "City not found");
-
     displayCurrentWeather(data.location, data.current);
     displayForecast(data.forecast.forecastday);
     addRecentCity(data.location.name);
@@ -81,16 +79,11 @@ async function fetchWeather(city) {
 async function fetchWeatherByCoords(lat, lon) {
   clearUI();
   try {
-    const q = `${lat},${lon}`;
-    const url = `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${encodeURIComponent(
-      q
-    )}&days=5&aqi=no&alerts=no`;
+    const url = `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${lat},${lon}&days=7&aqi=no&alerts=no`;
     const res = await fetch(url);
     const data = await res.json();
-
     if (res.status !== 200)
       throw new Error(data.error?.message || "Location not found");
-
     displayCurrentWeather(data.location, data.current);
     displayForecast(data.forecast.forecastday);
     addRecentCity(data.location.name);
@@ -106,20 +99,14 @@ function displayCurrentWeather(locationData, currentData) {
   updateTempDisplay();
   humidityElem.textContent = currentData.humidity;
   windElem.textContent = currentData.wind_kph;
-
   weatherIconElem.src = `https:${currentData.condition.icon}?t=${Date.now()}`;
   weatherIconElem.alt = currentData.condition.text;
   setBackground(currentData.condition.code);
-
-  alertElem.textContent = "";
-  if (currentTempCelsius >= 40) {
-    alertElem.textContent =
-      "⚠️ Extreme Temperature Alert! Stay hydrated and avoid heat exposure.";
-  }
+  alertElem.textContent =
+    currentTempCelsius >= 40 ? "⚠️ Extreme Temperature Alert!" : "";
 }
 
 function updateTempDisplay() {
-  if (currentTempCelsius === null) return;
   if (isCelsius) {
     tempElem.textContent = `${currentTempCelsius.toFixed(1)} °C`;
     tempToggleBtn.textContent = "Toggle to °F";
@@ -130,28 +117,27 @@ function updateTempDisplay() {
   }
 }
 
-function setBackground(conditionCode) {
+function setBackground(code) {
   const rainCodes = [
     1063, 1150, 1153, 1180, 1183, 1186, 1189, 1192, 1195, 1204, 1207, 1240,
     1243, 1246, 1273, 1276, 1279, 1282,
   ];
-  if (rainCodes.includes(conditionCode)) {
+  if (rainCodes.includes(code)) {
     bodyElem.classList.replace("bg-gray-900", "bg-blue-900");
   } else {
     bodyElem.classList.replace("bg-blue-900", "bg-gray-900");
   }
 }
 
-function displayForecast(forecastDays) {
+function displayForecast(days) {
   forecastElem.innerHTML = "";
-  forecastDays.forEach((day, i) => {
+  days.forEach((day, i) => {
     const date = new Date(day.date);
     const dayName = date.toLocaleDateString(undefined, { weekday: "short" });
     const monthDay = date.toLocaleDateString(undefined, {
       month: "short",
       day: "numeric",
     });
-
     const card = document.createElement("div");
     card.className =
       "forecast-card bg-gray-800 text-white rounded shadow p-3 flex flex-col items-center text-center";
@@ -172,50 +158,50 @@ function displayForecast(forecastDays) {
   });
 }
 
-function showError(message) {
-  errorMessageElem.textContent = message;
+function showError(msg) {
+  errorMessageElem.textContent = msg;
   clearUI();
 }
 
 function clearUI() {
-  locationElem.textContent = "";
-  tempElem.textContent = "";
-  humidityElem.textContent = "";
-  windElem.textContent = "";
+  locationElem.textContent =
+    tempElem.textContent =
+    humidityElem.textContent =
+    windElem.textContent =
+      "";
   weatherIconElem.src = "";
   forecastElem.innerHTML = "";
   alertElem.textContent = "";
-  currentTempCelsius = null;
 }
 
-// Event Listeners
-searchBtn.addEventListener("click", () => {
-  const city = cityInput.value;
-  if (!city.trim()) return showError("Please enter a city name.");
-  fetchWeather(city);
-});
+// Events
+searchBtn.onclick = () => {
+  if (!cityInput.value.trim()) return showError("Please enter a city name.");
+  fetchWeather(cityInput.value);
+};
 cityInput.addEventListener("keyup", (e) => {
   if (e.key === "Enter") searchBtn.click();
 });
-currentLocationBtn.addEventListener("click", () => {
+currentLocationBtn.onclick = () => {
   if (!navigator.geolocation) return showError("Geolocation not supported.");
   navigator.geolocation.getCurrentPosition(
     (pos) => fetchWeatherByCoords(pos.coords.latitude, pos.coords.longitude),
-    (err) => showError("Unable to retrieve location.")
+    () => showError("Unable to get location.")
   );
-});
-tempToggleBtn.addEventListener("click", () => {
-  if (currentTempCelsius === null) return;
-  isCelsius = !isCelsius;
-  updateTempDisplay();
-});
-recentCitiesSelect.addEventListener("change", () => {
+};
+tempToggleBtn.onclick = () => {
+  if (currentTempCelsius) {
+    isCelsius = !isCelsius;
+    updateTempDisplay();
+  }
+};
+recentCitiesSelect.onchange = () => {
   if (recentCitiesSelect.value) fetchWeather(recentCitiesSelect.value);
-});
+};
 
-// Autocomplete
+// Autocomplete with prefix filter
 cityInput.addEventListener("input", async () => {
-  const query = cityInput.value.trim();
+  const query = cityInput.value.trim().toLowerCase();
   if (query.length < 2) {
     suggestionsElem.innerHTML = "";
     suggestionsElem.classList.add("hidden");
@@ -233,25 +219,28 @@ cityInput.addEventListener("input", async () => {
       suggestionsElem.classList.remove("hidden");
       return;
     }
+    const filtered = cities.filter((c) =>
+      c.name.toLowerCase().startsWith(query)
+    );
+    const finalList = filtered.length ? filtered : cities;
     suggestionsElem.innerHTML = "";
-    cities.forEach((city) => {
+    finalList.forEach((city) => {
       const li = document.createElement("li");
       li.textContent = `${city.name}, ${city.region}, ${city.country}`;
       li.className = "p-2 hover:bg-gray-100 cursor-pointer";
-      li.addEventListener("click", () => {
+      li.onclick = () => {
         cityInput.value = city.name;
         suggestionsElem.classList.add("hidden");
         fetchWeather(city.name);
-      });
+      };
       suggestionsElem.appendChild(li);
     });
     suggestionsElem.classList.remove("hidden");
-  } catch (err) {
-    console.error(err);
+  } catch (e) {
+    console.error(e);
   }
 });
 document.addEventListener("click", (e) => {
-  if (!suggestionsElem.contains(e.target) && e.target !== cityInput) {
+  if (!suggestionsElem.contains(e.target) && e.target !== cityInput)
     suggestionsElem.classList.add("hidden");
-  }
 });

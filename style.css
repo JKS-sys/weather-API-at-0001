@@ -1,10 +1,8 @@
-/* Suggestions dropdown styling */
 #suggestions {
   max-height: 250px;
   overflow-y: auto;
 }
 
-/* Fade-in effect for forecast cards */
 .forecast-card {
   opacity: 0;
   transform: translateY(10px);
