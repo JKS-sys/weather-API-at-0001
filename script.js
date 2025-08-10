@@ -16,6 +16,7 @@ const errorMessageElem = document.getElementById("error-message");
 const recentContainer = document.getElementById("recent-container");
 const recentCitiesSelect = document.getElementById("recent-cities");
 const bodyElem = document.getElementById("body");
+const suggestionsElem = document.getElementById("suggestions");
 
 let currentTempCelsius = null;
 let isCelsius = true;
@@ -35,6 +36,54 @@ function loadRecentCities() {
   }
 }
 
+// Fetch city suggestions when typing
+cityInput.addEventListener("input", async () => {
+  const query = cityInput.value.trim();
+  if (query.length < 2) {
+    suggestionsElem.innerHTML = "";
+    suggestionsElem.classList.add("hidden");
+    return;
+  }
+
+  try {
+    const url = `https://api.weatherapi.com/v1/search.json?key=${apiKey}&q=${encodeURIComponent(
+      query
+    )}`;
+    const res = await fetch(url);
+    const cities = await res.json();
+
+    if (!Array.isArray(cities) || cities.length === 0) {
+      suggestionsElem.innerHTML =
+        "<li class='p-2 text-gray-500'>No results</li>";
+      suggestionsElem.classList.remove("hidden");
+      return;
+    }
+
+    // Populate dropdown
+    suggestionsElem.innerHTML = "";
+    cities.forEach((city) => {
+      const li = document.createElement("li");
+      li.textContent = `${city.name}, ${city.region}, ${city.country}`;
+      li.className = "p-2 hover:bg-gray-100 cursor-pointer";
+      li.addEventListener("click", () => {
+        cityInput.value = city.name;
+        suggestionsElem.classList.add("hidden");
+        fetchWeather(city.name);
+      });
+      suggestionsElem.appendChild(li);
+    });
+    suggestionsElem.classList.remove("hidden");
+  } catch (error) {
+    console.error("Autocomplete error:", error);
+  }
+});
+
+// Hide suggestions when clicking outside
+document.addEventListener("click", (e) => {
+  if (!suggestionsElem.contains(e.target) && e.target !== cityInput) {
+    suggestionsElem.classList.add("hidden");
+  }
+});
 function updateRecentDropdown() {
   recentCitiesSelect.innerHTML = "";
   recentCities.forEach((city) => {

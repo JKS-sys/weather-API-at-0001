@@ -1,0 +1,12 @@
+/* style.css */
+
+/* Ensure input and dropdown exactly match container width */
+#suggestions {
+  min-width: 100%;
+}
+
+/* Optional: limit dropdown height & make scrollable */
+#suggestions {
+  max-height: 250px;
+  overflow-y: auto;
+}
